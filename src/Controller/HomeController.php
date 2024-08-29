@@ -20,8 +20,6 @@ class HomeController extends AbstractController
     #[Route('/')]
     public function __invoke(): Response
     {
-
-        
         // Create a new map instance
         $myMap = (new Map())
             // Explicitly set the center and zoom
@@ -32,20 +30,30 @@ class HomeController extends AbstractController
         ;
 
         // Get all sports spots Paris 2024 OG
-        $response = $this->httpClient->request('GET', 'https://www.data.gouv.fr/fr/datasets/r/1d61b1f4-4730-4dfa-aa44-34220f67f493');
+        // $response = $this->httpClient->request('GET', 'https://www.data.gouv.fr/fr/datasets/r/1d61b1f4-4730-4dfa-aa44-34220f67f493');
+        $response = $this->httpClient->request('GET', 'http://localhost:3000/api/poi');
         $points = json_decode($response->getContent(), true);
+        // dd($points);
 
         foreach($points as $record) {
+
             $myMap->addMarker(new Marker(
                 position: new Point(
-                    $record['point_geo']['lat'],
-                    $record['point_geo']['lon'],
+                    // $record['point_geo']['lat'],
+                    // $record['point_geo']['lon'],
+                    $record['latitude'],
+                    $record['longitude'],
                 ), 
-                title: $record['nom_site'],
+                // title: $record['nom_site'],
+                title: $record['name'],
+                // infoWindow: new InfoWindow(
+                //     headerContent: '<b>'.$record['nom_site'].' - Du '.$record['start_date'].' au '.$record['end_date'].'</b>',
+                //     content: $record['sports']
+                // )
                 infoWindow: new InfoWindow(
-                    headerContent: '<b>'.$record['nom_site'].' - Du '.$record['start_date'].' au '.$record['end_date'].'</b>',
-                    content: $record['sports']
-                )
+                    headerContent: '<h2>'.$record['city'].' - '.$record['name'].'</h2>',
+                    content: '<p>'.$record['description'].'</p>'
+                ),
             ));
         }
 

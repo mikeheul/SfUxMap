@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paris 2024 - All Olympics competitions sites{% endblock %}
+{# {% block title %}Paris 2024 - All Olympics competitions sites{% endblock %} #}
+{% block title %}POI's{% endblock %}
 
 {% block body %}
     {% dump(data) %}
-    {# <h1>Paris 2024 - All Olympics competitions sites</h1> #}
     {{ render_map(my_map, { style: 'min-height: 100vh' }) }}
 {% endblock %}
